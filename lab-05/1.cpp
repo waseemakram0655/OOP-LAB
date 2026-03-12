@@ -1,93 +1,80 @@
-// You&#39;re building a simple food delivery app. The app has Customer and Restaurant. They connect
-// through Order.
-// Your Task:
-// Write the code for Customer, Restaurant, and Order classes showing their relationship.
-// Simple Requirements:
-// 1. Customer Class:
-// o Properties: name
-// o Method: placeOrder(Restaurant* r, string food) - creates an order
-// 2. Restaurant Class:
-// o Properties: name
-// o Method: takeOrder(Order* o) - receives an order
-// 3. Order Class:
-// o Properties: id, customer, restaurant, foodItem
-// o Method: show() - prints order details
-// o
+#include <iostream>
+#include <string>
 
-// What Your Code Must Show:
-// Customers and Restaurants created first (before any orders)
-// Order connects them (stores customer and restaurant names)
-
-#include<iostream>
 using namespace std;
 
-class customer{
-    public:
+class MedicationEntry {
+public:
+    string drugName;
+    string dose;
+    string timeGiven;
+
+    MedicationEntry(string drug, string d, string t) 
+        : drugName(drug), dose(d), timeGiven(t) {}
+};
+
+class VitalSignsCheck {
+public:
+    double temperature;
+    int heartRate;
+    string timeChecked;
+
+    VitalSignsCheck(double temp, int hr, string t) 
+        : temperature(temp), heartRate(hr), timeChecked(t) {}
+};
+
+class DiagnosisNote {
+public:
+    string noteText;
+    string doctorName;
+    string date;
+
+    DiagnosisNote(string text, string doc, string d) 
+        : noteText(text), doctorName(doc), date(d) {}
+};
+
+class PatientRecord {
+private:
+    int patientId;
     string name;
-    customer(string i=""):name(i){}
-    void placeorder(order &o,rest &p){
-      string a,b;
-      cout<<"Enter the food you want to order:"<<endl;
-      cin>>a;
-      o.setfood(a);
-      cout<<"Enter the restaurant from which you want to order:"<<endl;
-      cin>>b;
-      p.setrest(b); 
-    }
-string getcustomer(){return name;}
-};
-class rest{
-    private:
- string name;
- 
- public:
- string status;
- rest(string nam=""):name(nam){}
-    string getrest(){return name;}
-    void setrest(string o){
-      name=o;
-    }
-    void takeorder(string x){
-   status=x;}
-};
-class order{
-    public:
-    int id;
-    customer *c;
-    rest *r;
-    string fooditem;
+    string dob;
 
-    order(int i=1,string food="",customer *s,rest*l):id(i),fooditem(food){r=l;
-      c=s;
-    }
-    void setfood(string x){
-      fooditem=x;
-    }
-    void est(){cout<<c->getcustomer()<<" placed order at "<<r->getrest()<<endl;}
-      void info(){cout<<id<<" "<<fooditem<<" for "<<c->getcustomer()<<" from "<<r->getrest()<<endl;}
-      void status(){cout<<r->getrest()<<" "<<r->status<<" "<<fooditem<<endl;}
-      void gone(){cout<<c->getcustomer()<<" still exists: "<<r->getrest()<<endl;}
-        
-    };
-    // void placingorder(){
-    //    cout<<c->name<<" placed order at "<<r->name<<endl; }
-    //    void orderdetails(){
-    //     cout<<"order Number "<<id<<":"<<c->name<<" placed order at "<<r->name<<" for "<<fooditem<<endl; }
-       
+    MedicationEntry* medication;
+    VitalSignsCheck* vitals;
+    DiagnosisNote* diagnosis;
 
-int main(){
-    customer s1("Talha");
-    rest r1("XYZ");
-    r1.takeorder("WAiting");
-    order o1(101,"Cake",&s1,&r1);
-    s1.placeorder(o1,r1);
-     cout<<"=================================placing order============================"<<endl;
-     o1.est();
-     cout<<"=================================Order Details============================"<<endl;
-     o1.info();
-     cout<<"=================================Restaurant Status============================"<<endl;
-     o1.status();
-     cout<<"=================================After Orders Are Gone============================"<<endl;
-     o1.gone();
+public:
+    PatientRecord(int id, string n, string d) : patientId(id), name(n), dob(d) {
+        medication = new MedicationEntry("Amoxicillin", "500mg", "08:00 AM");
+        vitals = new VitalSignsCheck(98.6, 72, "09:30 AM");
+        diagnosis = new DiagnosisNote("Bacterial Infection", "Dr. Wilson", "2026-03-12");
+        cout << "[System] Record and medical entries created for " << name << endl;
+    }
+
+    ~PatientRecord() {
+        delete medication;
+        delete vitals;
+        delete diagnosis;
+        cout << "[System] Record and all medical entries for " << name << " have been deleted." << endl;
+    }
+
+    void displayRecord() {
+        cout << "\n========== PATIENT RECORD ==========" << endl;
+        cout << "ID: " << patientId << " | Name: " << name << " | DOB: " << dob << endl;
+        cout << "------------------------------------" << endl;
+        cout << "Medication: " << medication->drugName << " (" << medication->dose << ") at " << medication->timeGiven << endl;
+        cout << "Vitals: Temp " << vitals->temperature << "F, HR " << vitals->heartRate << " bpm at " << vitals->timeChecked << endl;
+        cout << "Diagnosis: " << diagnosis->noteText << " (by " << diagnosis->doctorName << " on " << diagnosis->date << ")" << endl;
+        cout << "====================================\n" << endl;
+    }
+};
+
+int main() {
+    PatientRecord* lilyRecord = new PatientRecord(101, "Lily Smith", "1995-05-15");
     
+    lilyRecord->displayRecord();
+
+    delete lilyRecord; 
+
+    return 0;
 }
