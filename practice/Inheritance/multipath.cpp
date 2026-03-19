@@ -62,4 +62,11 @@ class school:public student,public teacher{
 		show1();
 		cout<<"Teacher"<<endl;
 		show2();
-		}
+		}};
+    int main(){
+school s("Waseem",18,"CS",18000,"Gallant",95);
+
+s.showall();
+
+  return 0;
+}
