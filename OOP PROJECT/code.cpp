@@ -2,8 +2,9 @@
 #include<fstream>
 using namespace std;
 class Liabilities;
-
+class zakat;
 class Assets;
+void print_separator();
 double nisab=503529.0;
 double goldprice=495000;
 double silverprice=9757;
@@ -33,56 +34,6 @@ void menu(){
 }
 
 };
-class Information{
-string name;
-string email;
-string phoneNumber;
-int age;
-double zakatpayable;
-Assets a;
-Liabilities l;
-zakat z;
-
-public:
-friend void setzakat(Information i);
-string getname(){return name;}
-string getemail(){return email;}
-double getzakat(){return zakatpayable;}
-void setInformation(){
-cout<<"Enter name"<<endl; cin>>name;
-cout<<"Enter email"<<endl; cin>>email;
-cout<<"Enter phone number"<<endl; cin>>phoneNumber;
-cout<<"Enter age"<<endl; cin>>age;
-}
-void calculatezakat(){
-  l.setliabilities();
-  a.setassets();
-  get_total(a,l,z);
-if(z.gettotal()>=nisab){
-zakatpayable=z.gettotal()*0.025;
-cout<<"The total zakat payable is ="<<zakatpayable<<endl;
-}else cout<<"You are not eligible for zakat"<<endl;
-}
-
-Information(string n,string e,string p,int a):name(n),email(e),phoneNumber(p),age(a){}
-Information(){}
-
-
-
-};
-class zakat{
-  double total;
-  public:
-  zakat(){
-    total=0;
-  }
-  friend void get_total(Assets a,Liabilities l,zakat z);
-  double gettotal(){return total;}
-};
-class checkEligibility:public Information{
-
-};
-//
 class Assets{
 double gold;
 double silver;
@@ -93,7 +44,7 @@ double other;
 double lent;
 
 public:
-friend void get_total(Assets a,Liabilities l,zakat z);
+friend void get_total(Assets a,Liabilities l,zakat &z);
 void setassets(){
   char x;
   cout<<"You will be inquired about your assets:\n\n";
@@ -131,13 +82,24 @@ cout<<"\n\n";
 
 };
 //
+class zakat{
+  double total;
+  public:
+  zakat(){
+    total=0;
+  }
+  friend void get_total(Assets a,Liabilities l,zakat &z);
+  double gettotal(){return total;}
+};
+
+//
 class Liabilities{
 double loans;
 double bills;
 double others;
 
 public:
-friend void get_total(Assets a,Liabilities l,zakat z);
+friend void get_total(Assets a,Liabilities l,zakat &z);
 
 void setliabilities(){
   
@@ -160,6 +122,51 @@ double get_liabilities_amount(){
   return (loans+others+bills);
 }
 };
+//
+class Information{
+string name;
+string email;
+string phoneNumber;
+int age;
+double zakatpayable;
+Assets a;
+Liabilities l;
+zakat z;
+
+public:
+friend void setzakat(Information i);
+string getname(){return name;}
+string getemail(){return email;}
+double getzakat(){return zakatpayable;}
+void setInformation(){
+cout<<"Enter name"<<endl; cin>>name;
+cout<<"Enter email"<<endl; cin>>email;
+cout<<"Enter phone number"<<endl; cin>>phoneNumber;
+cout<<"Enter age"<<endl; cin>>age;
+}
+void calculatezakat(){
+  l.setliabilities();
+  a.setassets();
+  get_total(a,l,z);
+if(z.gettotal()>=nisab){
+zakatpayable=z.gettotal()*0.025;
+cout<<"The total zakat payable is ="<<zakatpayable<<endl;
+}else cout<<"You are not eligible for zakat"<<endl;
+}
+
+Information(string n,string e,string p,int a):name(n),email(e),phoneNumber(p),age(a){}
+Information(){}
+
+
+
+};
+class checkEligibility:public Information{
+
+};
+//
+
+//
+
 
 class History{
 
@@ -248,7 +255,7 @@ class FAQ:public support{
 print_separator();
   }
 };
-void get_total(Assets a,Liabilities l,zakat z){
+void get_total(Assets a,Liabilities l,zakat &z){
   z.total=((a.gold*goldprice)+(a.silver*silverprice)+a.cash+a.stocksValue+a.businessInventory+a.other+a.lent-l.bills-l.loans-l.others);
 }
 void setzakat(Information i){
@@ -277,6 +284,7 @@ switch(n) {
           //Calculate zakat
           client.calculatezakat();
           h.save(client.getname(),client.getemail(),client.getzakat());
+          cout<<"Your Zakat is = "<<client.getzakat()<<endl;
            break;
             case 2:
                 //view_history
@@ -302,4 +310,8 @@ switch(n) {
 }
 
 }
+
+
+delete s;
+delete f;
 return 0;}
