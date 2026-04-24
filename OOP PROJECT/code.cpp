@@ -160,13 +160,7 @@ double get_liabilities_amount(){
   return (loans+others+bills);
 }
 };
-class FAQ{};
-class Identation{};
-class Display{};
-class Teachings{};
-class History{};
-class Suggestions{};
-class Evidence{};
+
 class History{
 
   public:
@@ -190,7 +184,70 @@ class History{
     }
   
 };
+class support{
+public:
+virtual void show()=0;
+};
+class Suggestions:public support{
+  public:
+  void show()override{
+    print_separator();
+cout << "\n===== CHARITY RECOMMENDATIONS =====" << endl;
+        cout << "1. Edhi Foundation (Welfare)" << endl;
+        cout << "2. Indus Hospital (Healthcare)" << endl;
+        cout << "3. Saylani Welfare Trust (Food/Education)" << endl;
+        cout << "4. IMCHF" << endl;
+        cout << "===================================\n" << endl;
 
+    print_separator();
+  }
+};
+
+class FAQ:public support{
+
+
+  public:
+  void show()override{
+  cout<<"=============ZAKAT FAQ============="<<endl;
+    print_separator();
+    printf("\n\n");
+    
+    cout<<"Q: What is Zakat?"<<endl;
+   cout<<"A: Zakat is obligatory charity - 2.5%% of wealth held for one year.";
+    cout<<"\n\n";
+    
+    cout<<"Q: Who must pay Zakat?\n";
+    cout<<"A: Muslims whose wealth exceeds Nisab for one lunar year."<<endl;
+    cout<<"\n\n";
+    
+    cout<<"Q: What is Nisab?";
+    cout<<"\n";
+    cout<<"A: The minimum threshold - equivalent to 87.48g gold or 612.36g silver.";
+    cout<<"\n\n";
+    
+    cout<<"Q: What wealth is Zakatable?";
+    cout<<"\n";
+    cout<<"A: Cash, gold, silver, savings, business assets, money owed to you.";
+    cout<<"\n\n";
+    
+    cout<<"Q: What about real estate/property?\n";
+    cout<<"A: Personal residence is exempt. Rental/investment property is Zakatable.\n\n";
+    
+    cout<<"Q: What about vehicles?\n";
+    cout<<"A: Personal use vehicles are exempt. Commercial vehicles are Zakatable.\n\n";
+    
+    cout<<"Q: Can I deduct debts?\n";
+    cout<<"A: Yes, immediate debts/bills reduce your Zakatable wealth.\n\n";
+    
+    cout<<"Q: Who receives Zakat?\n";
+    cout<<"A: 8 categories in Quran 9:60 - poor, needy, collectors, new Muslims,";
+    cout<<"freeing captives, debtors, in Allah's cause, travelers in need.\n\n";
+    
+    cout<<"Q: Special cases not covered here?\n";
+    cout<<"A: Please consult a qualified Islamic scholar for guidance.\n\n";
+print_separator();
+  }
+};
 void get_total(Assets a,Liabilities l,zakat z){
   z.total=((a.gold*goldprice)+(a.silver*silverprice)+a.cash+a.stocksValue+a.businessInventory+a.other+a.lent-l.bills-l.loans-l.others);
 }
@@ -200,11 +257,17 @@ void setzakat(Information i){
   cin>>p;
   i.zakatpayable-=p;
 }
+void print_separator(){
+  cout<<"______________________________________________________________________"<<endl;
+}
 int main(){
 Information client;
 client.setInformation();
 chatbot clientschatbot;
   History h;
+  support *f,*s;//must delete memory
+  f=new FAQ;
+  s=new Suggestions;
 int n=1;
 while (n!=6){
 clientschatbot.menu();
@@ -226,10 +289,12 @@ switch(n) {
             
                 break;
             case 4:
+            f->show();
              //   show_faq
                 break;
             case 5:
                 //show_charity_options
+                s->show();
                 break;
             case 6:
                break;
